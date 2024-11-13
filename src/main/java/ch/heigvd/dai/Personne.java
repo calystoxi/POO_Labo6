@@ -9,6 +9,6 @@ public abstract class Personne {
     }
 
     public String toString(){
-        return null;
+        return nom + " " + prenom;
     }
 }

@@ -1,33 +1,32 @@
 package ch.heigvd.dai;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class Professeur extends Personne {
     private final String abreviation;
-    private final List<Lecon> lecons = new ArrayList<>();
+    private Lecon[] lecons;
 
     public Professeur(String nom, String prenom, String abreviation) {
         super(nom, prenom);
         this.abreviation = abreviation;
+        this.lecons = new Lecon[0];
+    }
+    public Professeur(String nom, String prenom, String abreviation,
+                      Lecon[] listLecon) {
+        super(nom, prenom);
+        this.abreviation = abreviation;
+        this.lecons = Arrays.copyOf(listLecon, listLecon.length);
     }
 
     public String abreviation() {
         return abreviation;
     }
-    public String horaire(List<Lecon> lecons) {
-        List<Lecon> leconsProfesseur = new ArrayList<>();
-        for (Lecon lecon : lecons) {
-            if (lecon.getProfesseur() != null && lecon.getProfesseur().equals(this)) {
-                leconsProfesseur.add(lecon);
-            }
-        }
-        String titre = String.format("-- Horaire Prof. %s %s (%s)", prenom, nom, abreviation);
-        return HoraireUtils.afficherHoraire(leconsProfesseur, titre);
-    }
 
-    @Override
-    public String toString() {
-        return "Prof. " + prenom + " " + nom + " (" + abreviation() + ")";
+    public void addLecon(Lecon lesson) {
+        this.lecons = Arrays.copyOf(this.lecons, this.lecons.length + 1);
+        this.lecons[this.lecons.length - 1] = lesson;
+    }
+    public String toString(){
+        return "Prof. " + super.toString() + " (" + abreviation + ") ";
     }
 }

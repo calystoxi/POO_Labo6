@@ -1,37 +1,38 @@
 package ch.heigvd.dai;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class Groupe {
     private final String orientation;
     private final int trimestre;
     private final int numero;
-    private final List<Etudiant> etudiants;
-    private final List<Lecon> lecons;
+    private Lecon[] lecons;
+    private final Etudiant[] etudiants;
 
-    public Groupe(String orientation, int trimestre, int numero) {
+    public Groupe(int numero, String orientation, int trimestre,
+                  Etudiant[] list) {
         this.orientation = orientation;
         this.trimestre = trimestre;
         this.numero = numero;
-        this.etudiants = new ArrayList<>();
-        this.lecons = new ArrayList<>();
+        this.lecons = new Lecon[0];
+        this.etudiants = new Etudiant[list.length];
+        for(int i = 0; i < list.length; i++) {
+            list[i].setGroup(this);
+            etudiants[i] = list[i];
+        }
     }
 
-    public void ajouterEtudiant(Etudiant etudiant) {
-        etudiants.add(etudiant);
+    public String nom(){
+        return orientation + trimestre + "-"+ numero;
     }
-
-    public void ajouterLecon(Lecon lecon) {
-        lecons.add(lecon);
+    public void setLecons(Lecon[] l){
+        this.lecons = Arrays.copyOf(l,l.length);
     }
-
-    public String getNom() {
-        return String.format("%s%d-%d", orientation, trimestre, numero);
+    public String horaire (){
+        return "-- Horaire du group " + nom() + " (" + nombreEtudiants() + " " +
+                "etudiants)\n\n" + Lecon.horaire(this.lecons);
     }
-
-    public String afficherHoraire() {
-        String titre = String.format("-- Horaire du groupe %s (%d étudiants)", getNom(), etudiants.size());
-        return HoraireUtils.afficherHoraire(lecons, titre);
+    public int nombreEtudiants() {
+        return etudiants.length;
     }
 }
